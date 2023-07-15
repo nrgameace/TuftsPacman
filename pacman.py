@@ -1,4 +1,6 @@
 import pygame, os, time, random
+
+#Sets Up Game
 map_data = [
     [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
     [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
@@ -32,6 +34,14 @@ map_data = [
     [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
 
 ]
+
+current_tile = []
+top_tile = []
+bottom_tile = []
+left_tile = []
+right_tile = []
+
+
 
 BLACK = (0, 0, 0)
 BLUE = (0, 0, 175)
@@ -81,12 +91,12 @@ for i in range(num_ghosts):
     elif number == 1:
         ghost_directions.append([1,0])
 
-# def check_tile():
-#     current_tile = map_data[round(pacman_position[0]/32), round(pacman_position[1]/32)]
-#     top_tile = map_data[round(pacman_position[0]/32), round(pacman_position[1]/32)-1]
-#     bottom_tile = map_data[round(pacman_position[0]/32), round(pacman_position[1]/32)+1]
-#     left_tile = map_data[round(pacman_position[0]/32)-1, round(pacman_position[1]/32)]
-#     right_tile = map_data[round(pacman_position[0]/32)+1, round(pacman_position[1]/32)]
+def check_tile():
+    current_tile = map_data[round(pacman_position[0]/32), round(pacman_position[1]/32)]
+    top_tile = map_data[round(pacman_position[0]/32), round(pacman_position[1]/32)-1]
+    bottom_tile = map_data[round(pacman_position[0]/32), round(pacman_position[1]/32)+1]
+    left_tile = map_data[round(pacman_position[0]/32)-1, round(pacman_position[1]/32)]
+    right_tile = map_data[round(pacman_position[0]/32)+1, round(pacman_position[1]/32)]
 
     
 
