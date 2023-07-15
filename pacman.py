@@ -98,6 +98,11 @@ def check_tile():
     left_tile = map_data[round(pacman_position[0]/32)-1, round(pacman_position[1]/32)]
     right_tile = map_data[round(pacman_position[0]/32)+1, round(pacman_position[1]/32)]
 
+def teleport():
+    if pacman_position[0] == 0:
+        pacman_position[0] = 940
+    elif pacman_position[0] == 960:
+        pacman_position[0] = 20
     
 
     
@@ -150,6 +155,8 @@ while running:
     #Clear the screen
     game_canvas.fill(BLACK)
 
+    #Teleport
+    teleport()
     # Draw Map
     draw_map()
     # Draw Pac-Man
