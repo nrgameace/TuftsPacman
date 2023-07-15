@@ -35,19 +35,7 @@ map_data = [
 BLACK = (0, 0, 0)
 BLUE = (0, 0, 175)
 YELLOW = (255, 255, 0)
-
-# class Pacman():
-#         def __init__(self, radius = 16, position = [400, 400], direction =[0,0], speed = 5, color = YELLOW):
-#             Game.__init__(self)
-#             pygame.init()
-#             self.pacman_radius = radius
-#             self.pacman_position = position
-#             self.pacman_direction = direction
-#             self.pacman_speed = speed
-#             self.pacman_color = color
-        
-#         def draw_pacman(self):
-#             pygame.draw.circle(Game().game_canvas, self.pacman_color, self.pacman_position, self.pacman_radius)
+       
         
         # def move_pacman(self):
         #      for event in pygame.event.get():
@@ -73,8 +61,9 @@ class Game():
             self.running, self.playing = True, True
             self.dt, self.prev_time = 0, 0
             self.open_tiles = [[]]
-            
-            #self.load_assets()
+            self.FPS = 30
+            self.clock = pygame.time.Clock()
+            self.load_assets()
             
         def draw_map(self):
             for row in range(len(map_data)):
@@ -89,32 +78,46 @@ class Game():
                         self.open_tiles.append([row, col])
         
         
-        def draw_pacman(self, radius = 16, direction =[0,0], speed = 5, color = YELLOW):
+        def draw_pacman(self, radius = 16, speed = 32, color = YELLOW):
             self.pacman_radius = radius
-            self.pacman_position = [(self.GAME_W)/2, (self.GAME_H) - 240]
-            self.pacman_direction = direction
             self.pacman_speed = speed
             self.pacman_color = color
+            self.pacman_position = [(self.GAME_W)/2, (self.GAME_H) - 240]
             pygame.draw.circle(self.game_canvas, self.pacman_color, self.pacman_position, self.pacman_radius)
+
+        def move_pacman(self, xdir = 0, ydir = 0):
+            self.xdir = xdir
+            self.ydir = ydir
+            self.pacman_position[0] += self.pacman_speed
+            self.pacman_position[1] += self.pacman_speed
+            self.draw_pacman()
+            
 
         def game_loop(self):
             while self.playing:
                 self.get_dt()
                 self.get_events()
+                
+                self.move_pacman()
+                self.draw_pacman()
                 self.update()
                 self.render()
-                for event in pygame.event.get():
-                    if event.type == pygame.QUIT:
-                        self.running = False
-                        self.playing = False
                     
-                
-                
+            
         def get_events(self):
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     self.playing = False
                     self.running = False
+                if event.type == pygame.KEYDOWN:
+                        if event.key == pygame.K_LEFT:
+                            self.draw_pacman(self, -0.5, 0)
+                        elif event.key == pygame.K_RIGHT:
+                            self.pacman_direction = [0.5, 0]
+                        elif event.key == pygame.K_UP:
+                            self.pacman_direction = [0, -0.5]
+                        elif event.key == pygame.K_DOWN:
+                            self.pacman_direction = [0, 0.5]
 
 
         
@@ -129,6 +132,7 @@ class Game():
 
 
         def get_dt(self):
+            self.clock.tick(self.FPS)
             now = time.time()
             self.dt = now - self.prev_time
             self.prev_time = now
@@ -153,23 +157,3 @@ g = Game()
 
 while g.running:
     g.game_loop()
-                
-# while True:
-#     for event in pygame.event.get():
-#         if event.type == pygame.QUIT:
-#             running = False
-
-
-#     # Clear the screen
-#     Game.screen.fill(BLACK)
-
-    
-#     # Update the display
-#     pygame.display.flip()
-
-#     # Limit the frame rate
-#     Game.clock.tick(60)
-
-# # Quit the game
-# pygame.quit()
-        
