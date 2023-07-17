@@ -256,12 +256,12 @@ while running:
         collisions = True
         if power_up_timer <= 0:
             power_up_active = False
-            ghost_colors = [LIGHT_BLUE, RED, PINK, ORANGE]
             collisions = False
-    # else:
-        
-    #     #This is for when pacman collides while not in the powerup phase
-    #     pass
+            ghost_colors = [LIGHT_BLUE, RED, PINK, ORANGE]
+            
+    
+    
+
 
 
     # Move ghosts
@@ -271,11 +271,18 @@ while running:
         ghost_positions_x.append(int(ghost_positions[i][0]/32))
         ghost_positions_y.append(int(ghost_positions[i][1]/32))
 
-    if collisions:
+    if collisions == True:
         for i in range(num_ghosts):
-            if pacman_x == ghost_positions_x[i] and pacman_y == ghost_positions_y[i]:
+            if pacman_x == ghost_positions_x[i] and pacman_y == ghost_positions_x[i]:
                 ghost_positions[i][0] = GAME_W/2
                 ghost_positions[i][1] = GAME_H/2
+    elif collisions == False:
+        for i in range(num_ghosts):
+            if pacman_x == ghost_positions_x[i] and pacman_y == ghost_positions_y[i]:
+                pacman_position = [(GAME_W)/2, (GAME_H) - 240]
+                ghost_positions[i][0] = GAME_W/2
+                ghost_positions[i][1] = GAME_H/2
+                pacman_lives -= 1
     
     
     #Clear the screen
@@ -292,13 +299,24 @@ while running:
     
 
     #Rescale screen to fit game window
-    draw_text(f"Score: " + str(score), 25, 455, 10)
+    draw_text(f"Score: " + str(score) + "     " + str(pacman_lives), 25, 455, 10)
+
     screen.blit(pygame.transform.scale(game_canvas,(SCREEN_WIDTH, SCREEN_HEIGHT)), (0,0))
     #Update the display
-    pygame.display.flip()
+    
+    if pacman_lives > 0:
+        pygame.display.flip()
+    else:
+        game_canvas.fill(BLACK)
+        draw_text("GAME OVER", 50, GAME_W/2, GAME_H/2)
+        screen.blit(pygame.transform.scale(game_canvas,(SCREEN_WIDTH, SCREEN_HEIGHT)), (0,0))
+        pygame.display.flip()
+
 
 # Limit the frame rate
     clock.tick(60)
 
 # Quit the game
+
+
 pygame.quit()
