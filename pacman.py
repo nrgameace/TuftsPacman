@@ -50,6 +50,7 @@ LIGHT_BLUE = (173, 216, 230)
 RED = (255, 0, 0)
 PINK = (255, 192, 203)
 ORANGE = (255, 165, 0)
+DARK_BLUE = (3,37,126)
 
 
 
@@ -70,10 +71,14 @@ FPS = 30
 clock = pygame.time.Clock()
 
 #Set Up Pacman
-pacman_radius = 14
+pacman_radius = 12
 pacman_position = [(GAME_W)/2, (GAME_H) - 240]
 pacman_direction = [0, 0]
 pacman_speed = 2
+score = 0
+power_up_active = False
+power_up_duration = 10
+power_up_timer = 0
 
 
 # Set up ghosts
@@ -84,6 +89,7 @@ ghost_directions = []
 ghost_speed = 1.5
 ghost_colors = [LIGHT_BLUE, RED, PINK, ORANGE]
 ghosts = []
+ghosts_eliminated = []
 for i in range(num_ghosts):
     ghost_positions.append([(GAME_W)/2, (GAME_H)/2])
     number = round(random.randint(0,1))
@@ -98,11 +104,7 @@ top_tile = []
 bottom_tile = []
 left_tile = []
 right_tile = []
-
-
-
-
-     
+ 
 # Function to move pacman from one side to the other.
 def teleport():
     if pacman_position[0] <= 0:
@@ -121,6 +123,7 @@ def check_collision(x, y):
         return True
     return False
 
+# Draw Text Function for Scoreboard
 def draw_text(text, size, x, y):
     font = pygame.font.Font(font_name, size)
     text_surface = font.render(text, True, WHITE)
@@ -129,7 +132,7 @@ def draw_text(text, size, x, y):
     game_canvas.blit(text_surface, text_rect.center)
     
 
-    
+# Function for drawing the map
 def draw_map():
     for row in range(len(map_data)):
         for col in range(len(map_data[row])):
@@ -191,12 +194,10 @@ while running:
         elif ghost_positions[i][1] >= GAME_H:
             ghost_positions[i][1] = 0
 
-    
-    
     #Teleport
     teleport()
-
-    # Check for Pacman wall collisions
+    
+    #Check for Pacman wall collisions
     if not teleport():
         if check_collision(pacman_position[0] - pacman_radius, pacman_position[1] - pacman_radius):
             pacman_position[0] -= pacman_direction[0] * pacman_speed
@@ -204,31 +205,56 @@ while running:
         if check_collision(pacman_position[0] + pacman_radius, pacman_position[1] + pacman_radius):
             pacman_position[0] -= pacman_direction[0] * pacman_speed
             pacman_position[1] -= pacman_direction[1] * pacman_speed
+        if check_collision(pacman_position[0] - pacman_radius, pacman_position[1] + pacman_radius):
+            pacman_position[0] -= pacman_direction[0] * pacman_speed
+            pacman_position[1] -= pacman_direction[1] * pacman_speed
+        if check_collision(pacman_position[0] + pacman_radius, pacman_position[1] - pacman_radius):
+            pacman_position[0] -= pacman_direction[0] * pacman_speed
+            pacman_position[1] -= pacman_direction[1] * pacman_speed
     
     # Check for Ghosts wall collisions
     for i in range(num_ghosts):
         if not teleport():
-            if check_collision(ghost_positions[i][0] - (ghost_width/2), ghost_positions[i][1] - (ghost_height/2)):
+            if check_collision(ghost_positions[i][0] - (ghost_width), ghost_positions[i][1] - (ghost_height)):
                 ghost_positions[i][0] -= ghost_directions[i][0] * ghost_speed
                 ghost_positions[i][1] -= ghost_directions[i][1] * ghost_speed
-            if check_collision(ghost_positions[i][0] + (ghost_width/2), ghost_positions[i][1] + (ghost_height/2)):
+            if check_collision(ghost_positions[i][0] + (ghost_width), ghost_positions[i][1] + (ghost_height)):
                 ghost_positions[i][0] -= ghost_directions[i][0] * pacman_speed
                 ghost_positions[i][1] -= ghost_directions[i][1] * pacman_speed
+            if check_collision(ghost_positions[i][0] - (ghost_width), ghost_positions[i][1] + (ghost_height)):
+                pacman_position[0] -= pacman_direction[0] * pacman_speed
+                pacman_position[1] -= pacman_direction[1] * pacman_speed
+            if check_collision(ghost_positions[i][0] + (ghost_width), ghost_positions[i][1] - (ghost_height)):
+                pacman_position[0] -= pacman_direction[0] * pacman_speed
+                pacman_position[1] -= pacman_direction[1] * pacman_speed
     
     # Check for dot collisions
     map_x = int(pacman_position[0] / 32)
     map_y = int(pacman_position[1] / 32)
     if map_data[map_y][map_x] == 0:  # Dot
         map_data[map_y][map_x] = 2
+        score += 10
+        
 
+    
     # Check for power-up collisions
     elif map_data[map_y][map_x] == 3:  # Power-up
         map_data[map_y][map_x] = 2
+        score += 50
+        power_up_active = True
+        power_up_timer = power_up_duration
+        
 
-
-
-
-
+    #Checks whether or not pacman has an active powerup, the outcome of pacman's collision with a ghost depends on if the power up is active or not.    
+    if power_up_active:
+        ghost_colors = [DARK_BLUE, DARK_BLUE, DARK_BLUE, DARK_BLUE]
+        power_up_timer -= 1/60
+        if power_up_timer <= 0:
+            power_up_active = False
+            ghost_colors = [LIGHT_BLUE, RED, PINK, ORANGE]
+    else:
+        #This is for when pacman collides while not in the powerup phase
+        pass
     # Move ghosts
     for i in range(num_ghosts):
         ghost_positions[i][0] += ghost_directions[i][0] * ghost_speed 
@@ -239,16 +265,16 @@ while running:
 
     # Draw Map
     draw_map()
-    # Draw Pac-Man
-    pacman_x = pacman_position[0] - pacman_radius if pacman_direction[0] < 0 else pacman_position[0]
-    pacman_y = pacman_position[1] - pacman_radius if pacman_direction[1] < 0 else pacman_position[1]
-    pygame.draw.circle(game_canvas, YELLOW, pacman_position, pacman_radius)
-    #Draw ghosts
+    #Draw Ghosts
     for i in range(num_ghosts):
         pygame.draw.rect(game_canvas, ghost_colors[i], (ghost_positions[i][0], ghost_positions[i][1], ghost_width, ghost_height))
+    # Draw Pac-Man
+    pygame.draw.circle(game_canvas, YELLOW, pacman_position, pacman_radius)
+    
+    
 
     #Rescale screen to fit game window
-    draw_text("Score", 50, 500, 500)
+    draw_text(f"Score: " + str(score), 25, 455, 10)
     screen.blit(pygame.transform.scale(game_canvas,(SCREEN_WIDTH, SCREEN_HEIGHT)), (0,0))
     #Update the display
     pygame.display.flip()
