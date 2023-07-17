@@ -58,7 +58,6 @@ DARK_BLUE = (3,37,126)
 
 #Set Up Game
 pygame.init()
-
 font_name = pygame.font.get_default_font()
 GAME_W,GAME_H = 960, 960
 SCREEN_WIDTH,SCREEN_HEIGHT = 800, 800
@@ -79,12 +78,16 @@ score = 0
 power_up_active = False
 power_up_duration = 10
 power_up_timer = 0
+collisions = False
+pacman_lives = 3
 
 
 # Set up ghosts
 num_ghosts = 4
 ghost_height, ghost_width = 28, 28
 ghost_positions = []
+ghost_positions_x = []
+ghost_positions_y = []
 ghost_directions = []
 ghost_speed = 1.5
 ghost_colors = [LIGHT_BLUE, RED, PINK, ORANGE]
@@ -104,7 +107,7 @@ top_tile = []
 bottom_tile = []
 left_tile = []
 right_tile = []
- 
+
 # Function to move pacman from one side to the other.
 def teleport():
     if pacman_position[0] <= 0:
@@ -172,6 +175,8 @@ while running:
 
     pacman_position[0] += pacman_direction[0] * pacman_speed
     pacman_position[1] += pacman_direction[1] * pacman_speed
+    pacman_x = int(pacman_position[0]/32)
+    pacman_y = int(pacman_position[1]/32)
 
     # Check for Pacman border collisions
     if pacman_position[0] < 0:
@@ -235,7 +240,6 @@ while running:
         map_data[map_y][map_x] = 2
         score += 10
         
-
     
     # Check for power-up collisions
     elif map_data[map_y][map_x] == 3:  # Power-up
@@ -249,16 +253,29 @@ while running:
     if power_up_active:
         ghost_colors = [DARK_BLUE, DARK_BLUE, DARK_BLUE, DARK_BLUE]
         power_up_timer -= 1/60
+        collisions = True
         if power_up_timer <= 0:
             power_up_active = False
             ghost_colors = [LIGHT_BLUE, RED, PINK, ORANGE]
-    else:
-        #This is for when pacman collides while not in the powerup phase
-        pass
+            collisions = False
+    # else:
+        
+    #     #This is for when pacman collides while not in the powerup phase
+    #     pass
+
+
     # Move ghosts
     for i in range(num_ghosts):
         ghost_positions[i][0] += ghost_directions[i][0] * ghost_speed 
         ghost_positions[i][1] += ghost_directions[i][1] * ghost_speed
+        ghost_positions_x.append(int(ghost_positions[i][0]/32))
+        ghost_positions_y.append(int(ghost_positions[i][1]/32))
+
+    if collisions:
+        for i in range(num_ghosts):
+            if pacman_x == ghost_positions_x[i] and pacman_y == ghost_positions_y[i]:
+                ghost_positions[i][0] = GAME_W/2
+                ghost_positions[i][1] = GAME_H/2
     
     
     #Clear the screen
