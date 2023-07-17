@@ -260,6 +260,7 @@ while running:
         ghost_positions[i][0] += ghost_directions[i][0] * ghost_speed 
         ghost_positions[i][1] += ghost_directions[i][1] * ghost_speed
     
+    
     #Clear the screen
     game_canvas.fill(BLACK)
 
