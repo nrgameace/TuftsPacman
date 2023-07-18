@@ -41,7 +41,7 @@ map_data = [
 
 
 
-
+#Sets up basic colors
 BLACK = (0, 0, 0)
 BLUE = (0, 0, 255)
 YELLOW = (255, 255, 0)
@@ -52,9 +52,14 @@ PINK = (255, 192, 203)
 ORANGE = (255, 165, 0)
 DARK_BLUE = (3,37,126)
 
-
-
-
+#Loads the sprites
+pacman_half_img = pygame.image.load('./pacmansprites/pacman_half.png')
+pacman_open_img = pygame.image.load('./pacmansprites/pacman_open.png')
+ghost_1_img = pygame.image.load('./pacmansprites/ghost_1.png')
+orange_1_img = pygame.image.load('./pacmansprites/orange_1.png')
+pinky_1_img = pygame.image.load('./pacmansprites/pink_1.png')
+red_1_img = pygame.image.load('./pacmansprites/red_1.png')
+blue_1_img = pygame.image.load('./pacmansprites/blue_1.png')
 
 #Set Up Game
 pygame.init()
