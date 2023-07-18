@@ -41,7 +41,7 @@ map_data = [
 
 
 
-#Sets up basic colors
+#Sets up basic colors with RGB numbers
 BLACK = (0, 0, 0)
 BLUE = (0, 0, 255)
 YELLOW = (255, 255, 0)
@@ -52,14 +52,7 @@ PINK = (255, 192, 203)
 ORANGE = (255, 165, 0)
 DARK_BLUE = (3,37,126)
 
-#Loads the sprites
-pacman_half_img = pygame.image.load('./pacmansprites/pacman_half.png')
-pacman_open_img = pygame.image.load('./pacmansprites/pacman_open.png')
-ghost_1_img = pygame.image.load('./pacmansprites/ghost_1.png')
-orange_1_img = pygame.image.load('./pacmansprites/orange_1.png')
-pinky_1_img = pygame.image.load('./pacmansprites/pinky_1.png')
-red_1_img = pygame.image.load('./pacmansprites/red_1.png')
-blue_1_img = pygame.image.load('./pacmansprites/blue_1.png')
+
 
 #Set Up Game
 pygame.init()
@@ -71,8 +64,23 @@ screen = pygame.display.set_mode((SCREEN_WIDTH,SCREEN_HEIGHT))
 running, playing = True, True
 dt, prev_time = 0, 0
 open_tiles = [[]]
-FPS = 30
+FPS = 60
 clock = pygame.time.Clock()
+
+#Loads the sprites
+pacman_half_img = pygame.transform.scale(pygame.image.load('./pacmansprites/pacman_half.png'), (32, 32))
+pacman_half_up_img = pygame.transform.scale(pygame.image.load('./pacmansprites/pacman_half_up.png'), (32,32))
+pacman_half_down_img = pygame.transform.scale(pygame.image.load('./pacmansprites/pacman_half_down.png'), (32, 32))
+pacman_half_left_img = pygame.transform.scale(pygame.image.load('./pacmansprites/pacman_half_left.png'), (32, 32))
+pacman_open_img = pygame.transform.scale(pygame.image.load('./pacmansprites/pacman_open.png'), (32,32))
+ghost_1_img = pygame.transform.scale(pygame.image.load('./pacmansprites/ghost_1.png'), (32, 32))
+orange_1_img = pygame.transform.scale(pygame.image.load('./pacmansprites/orange_1.png'), (32,32))
+pinky_1_img = pygame.transform.scale(pygame.image.load('./pacmansprites/pinky_1.png'), (32,32))
+red_1_img = pygame.transform.scale(pygame.image.load('./pacmansprites/red_1.png'), (32,32))
+blue_1_img = pygame.transform.scale(pygame.image.load('./pacmansprites/blue_1.png'), (32,32))
+pacman_dir_img = pacman_half_img
+tick = 0
+
 
 #Set Up Pacman
 pacman_radius = 12
@@ -168,17 +176,31 @@ while running:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
-    
+    if tick == 0:
+        pacman_right_img = pacman_half_img
+        pacman_left_img = pacman_half_left_img
+        pacman_up_img = pacman_half_up_img
+        pacman_down_img = pacman_half_down_img
+    if tick == 1:
+        pass
+        
+
+
+
     # Change Pac-Man direction
     if event.type == pygame.KEYDOWN:
         if event.key == pygame.K_LEFT:
             pacman_direction = [-1, 0]
+            pacman_dir_img = pacman_left_img
         elif event.key == pygame.K_RIGHT:
             pacman_direction = [1, 0]
+            pacman_dir_img = pacman_right_img
         elif event.key == pygame.K_UP:
             pacman_direction = [0, -1]
+            pacman_dir_img = pacman_up_img
         elif event.key == pygame.K_DOWN:
             pacman_direction = [0, 1]
+            pacman_dir_img = pacman_down_img
     
     pacman_position[0] += pacman_direction[0] * pacman_speed
     pacman_position[1] += pacman_direction[1] * pacman_speed
@@ -337,7 +359,8 @@ while running:
     for i in range(num_ghosts):
         pygame.draw.rect(game_canvas, ghost_colors[i], (ghost_positions[i][0], ghost_positions[i][1], ghost_width, ghost_height))
     # Draw Pac-Man
-    pygame.draw.circle(game_canvas, YELLOW, pacman_position, pacman_radius)
+    game_canvas.blit(pacman_dir_img, (pacman_position[0] - 16, pacman_position[1] - 16))
+    #pygame.draw.circle(game_canvas, YELLOW, pacman_position, pacman_radius)
     
     
 
