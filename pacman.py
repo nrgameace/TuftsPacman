@@ -86,8 +86,6 @@ pacman_lives = 3
 num_ghosts = 4
 ghost_height, ghost_width = 28, 28
 ghost_positions = []
-ghost_positions_x = []
-ghost_positions_y = []
 ghost_directions = []
 ghost_speed = 1.5
 ghost_colors = [LIGHT_BLUE, RED, PINK, ORANGE]
@@ -95,11 +93,16 @@ ghosts = []
 ghosts_eliminated = []
 for i in range(num_ghosts):
     ghost_positions.append([(GAME_W)/2, (GAME_H)/2])
-    number = round(random.randint(0,1))
+    number = round(random.randint(0,3))
     if number == 0:
         ghost_directions.append([0,1])
     elif number == 1:
         ghost_directions.append([1,0])
+    elif number == 2:
+        ghost_directions.append([0,-1])
+    elif number == 3:
+        ghost_directions.append([-1,0])
+    
 
 #Set Up Tiles
 current_tile = []
@@ -172,11 +175,16 @@ while running:
         elif event.key == pygame.K_DOWN:
             pacman_direction = [0, 1]
     
-
     pacman_position[0] += pacman_direction[0] * pacman_speed
     pacman_position[1] += pacman_direction[1] * pacman_speed
     pacman_x = int(pacman_position[0]/32)
     pacman_y = int(pacman_position[1]/32)
+    
+    # #Ghost change direction
+    # for i in range(num_ghosts):
+    #     if check_collision()
+
+    
 
     # Check for Pacman border collisions
     if pacman_position[0] < 0:
@@ -223,15 +231,25 @@ while running:
             if check_collision(ghost_positions[i][0] - (ghost_width), ghost_positions[i][1] - (ghost_height)):
                 ghost_positions[i][0] -= ghost_directions[i][0] * ghost_speed
                 ghost_positions[i][1] -= ghost_directions[i][1] * ghost_speed
+                # ghost_directions[i].clear()
+                # number = round(random.randint(0,3))
+                # if number == 0:
+                #     ghost_directions.append([0,1])
+                # elif number == 1:
+                #     ghost_directions.append([1,0])
+                # elif number == 2:
+                #     ghost_directions.append([0,-1])
+                # elif number == 3:
+                #     ghost_directions.append([-1,0])
             if check_collision(ghost_positions[i][0] + (ghost_width), ghost_positions[i][1] + (ghost_height)):
-                ghost_positions[i][0] -= ghost_directions[i][0] * pacman_speed
-                ghost_positions[i][1] -= ghost_directions[i][1] * pacman_speed
+                ghost_positions[i][0] -= ghost_directions[i][0] * ghost_speed
+                ghost_positions[i][1] -= ghost_directions[i][1] * ghost_speed
             if check_collision(ghost_positions[i][0] - (ghost_width), ghost_positions[i][1] + (ghost_height)):
-                pacman_position[0] -= pacman_direction[0] * pacman_speed
-                pacman_position[1] -= pacman_direction[1] * pacman_speed
+                ghost_positions[0] -= ghost_directions[0] * ghost_speed
+                ghost_positions[1] -= ghost_directions[1] * ghost_speed
             if check_collision(ghost_positions[i][0] + (ghost_width), ghost_positions[i][1] - (ghost_height)):
-                pacman_position[0] -= pacman_direction[0] * pacman_speed
-                pacman_position[1] -= pacman_direction[1] * pacman_speed
+                ghost_positions[0] -= ghost_directions[0] * ghost_speed
+                ghost_positions[1] -= ghost_directions[1] * ghost_speed
     
     # Check for dot collisions
     map_x = int(pacman_position[0] / 32)
@@ -268,17 +286,16 @@ while running:
     for i in range(num_ghosts):
         ghost_positions[i][0] += ghost_directions[i][0] * ghost_speed 
         ghost_positions[i][1] += ghost_directions[i][1] * ghost_speed
-        ghost_positions_x.append(int(ghost_positions[i][0]/32))
-        ghost_positions_y.append(int(ghost_positions[i][1]/32))
 
     if collisions == True:
         for i in range(num_ghosts):
-            if pacman_x == ghost_positions_x[i] and pacman_y == ghost_positions_x[i]:
+            if pacman_x == int(ghost_positions[i][0]/32) and pacman_y == int(ghost_positions[i][1]/32):
                 ghost_positions[i][0] = GAME_W/2
                 ghost_positions[i][1] = GAME_H/2
+                score += 200
     elif collisions == False:
         for i in range(num_ghosts):
-            if pacman_x == ghost_positions_x[i] and pacman_y == ghost_positions_y[i]:
+            if pacman_x == int(ghost_positions[i][0]/32) and pacman_y == int(ghost_positions[i][1]/32):
                 pacman_position = [(GAME_W)/2, (GAME_H) - 240]
                 ghost_positions[i][0] = GAME_W/2
                 ghost_positions[i][1] = GAME_H/2
