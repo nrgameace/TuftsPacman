@@ -14,10 +14,10 @@ map_data = [
     [1, 0, 1, 1, 1, 1, 0, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 0, 1, 1, 1, 1, 0, 1],
     [1, 0, 1, 1, 1, 1, 0, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 0, 1, 1, 1, 1, 0, 1],
     [1, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 1],
-    [1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1],
-    [1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1],
+    [1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 2, 0, 1, 1, 1, 1, 0, 2, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1],
+    [1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 2, 0, 1, 1, 1, 1, 0, 2, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1],
     [2, 2, 2, 2, 2, 1, 0, 1, 1, 0, 0, 0, 0, 0, 2, 2, 0, 0, 0, 0, 0, 1, 1, 0, 1, 2, 2, 2, 2, 2],
-    [2, 2, 2, 2, 2, 1, 0, 1, 1, 0, 1, 1, 1, 1, 2, 2, 1, 1, 1, 1, 0, 1, 1, 0, 1, 2, 2, 2, 2, 2],
+    [2, 2, 2, 2, 2, 1, 0, 1, 1, 0, 1, 1, 2, 2, 2, 2, 2, 2, 1, 1, 0, 1, 1, 0, 1, 2, 2, 2, 2, 2],
     [1, 1, 1, 1, 1, 1, 0, 1, 1, 0, 1, 1, 2, 2, 2, 2, 2, 2, 1, 1, 0, 1, 1, 0, 1, 1, 1, 1, 1, 1],
     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 2, 2, 2, 2, 2, 2, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
     [1, 1, 1, 1, 1, 1, 0, 1, 1, 0, 1, 1, 2, 2, 2, 2, 2, 2, 1, 1, 0, 1, 1, 0, 1, 1, 1, 1, 1, 1],
@@ -43,7 +43,7 @@ map_data = [
 
 
 BLACK = (0, 0, 0)
-BLUE = (0, 0, 175)
+BLUE = (0, 0, 255)
 YELLOW = (255, 255, 0)
 WHITE = (255, 255, 255)
 LIGHT_BLUE = (173, 216, 230)
@@ -84,10 +84,10 @@ pacman_lives = 3
 
 # Set up ghosts
 num_ghosts = 4
-ghost_height, ghost_width = 28, 28
+ghost_height, ghost_width = 25, 25
 ghost_positions = []
 ghost_directions = []
-ghost_speed = 1.5
+ghost_speed = 3
 ghost_colors = [LIGHT_BLUE, RED, PINK, ORANGE]
 ghosts = []
 ghosts_eliminated = []
@@ -228,28 +228,49 @@ while running:
     # Check for Ghosts wall collisions
     for i in range(num_ghosts):
         if not teleport():
-            if check_collision(ghost_positions[i][0] - (ghost_width), ghost_positions[i][1] - (ghost_height)):
+            if check_collision(ghost_positions[i][0], ghost_positions[i][1]):
                 ghost_positions[i][0] -= ghost_directions[i][0] * ghost_speed
                 ghost_positions[i][1] -= ghost_directions[i][1] * ghost_speed
-                # ghost_directions[i].clear()
-                # number = round(random.randint(0,3))
-                # if number == 0:
-                #     ghost_directions.append([0,1])
-                # elif number == 1:
-                #     ghost_directions.append([1,0])
-                # elif number == 2:
-                #     ghost_directions.append([0,-1])
-                # elif number == 3:
-                #     ghost_directions.append([-1,0])
+                number = round(random.randint(0,2))
+                if number == 0:
+                    ghost_directions[i] = [0,1]
+                elif number == 1:
+                    ghost_directions[i] = [1,0]
+                elif number == 2:
+                    ghost_directions[i] = [-1,0]
+                
             if check_collision(ghost_positions[i][0] + (ghost_width), ghost_positions[i][1] + (ghost_height)):
                 ghost_positions[i][0] -= ghost_directions[i][0] * ghost_speed
                 ghost_positions[i][1] -= ghost_directions[i][1] * ghost_speed
-            if check_collision(ghost_positions[i][0] - (ghost_width), ghost_positions[i][1] + (ghost_height)):
-                ghost_positions[0] -= ghost_directions[0] * ghost_speed
-                ghost_positions[1] -= ghost_directions[1] * ghost_speed
-            if check_collision(ghost_positions[i][0] + (ghost_width), ghost_positions[i][1] - (ghost_height)):
-                ghost_positions[0] -= ghost_directions[0] * ghost_speed
-                ghost_positions[1] -= ghost_directions[1] * ghost_speed
+                
+                number = round(random.randint(0,2))
+                if number == 0:
+                    ghost_directions[i] = [0,-1]
+                elif number == 1:
+                    ghost_directions[i] = [1,0]
+                elif number == 2:
+                    ghost_directions[i] = [-1,0]
+            if check_collision(ghost_positions[i][0], ghost_positions[i][1] + (ghost_height)):
+                ghost_positions[i][0] -= ghost_directions[i][0] * ghost_speed
+                ghost_positions[i][1] -= ghost_directions[i][1] * ghost_speed
+                
+                number = round(random.randint(0,2))
+                if number == 0:
+                    ghost_directions[i] = [0,1]
+                elif number == 1:
+                    ghost_directions[i] = [1,0]
+                elif number == 2:
+                    ghost_directions[i] = [0,-1]
+            if check_collision(ghost_positions[i][0] + (ghost_width), ghost_positions[i][1]):
+                ghost_positions[i][0] -= ghost_directions[i][0] * ghost_speed
+                ghost_positions[i][1] -= ghost_directions[i][1] * ghost_speed
+                number = round(random.randint(0,2))
+                if number == 0:
+                    ghost_directions[i] = [0,1]
+                elif number == 1:
+                    ghost_directions[i] = [0,-1]
+                elif number == 2:
+                    ghost_directions[i] = [-1,0]
     
     # Check for dot collisions
     map_x = int(pacman_position[0] / 32)
