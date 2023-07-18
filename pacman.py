@@ -73,17 +73,22 @@ pacman_half_up_img = pygame.transform.scale(pygame.image.load('./pacmansprites/p
 pacman_half_down_img = pygame.transform.scale(pygame.image.load('./pacmansprites/pacman_half_down.png'), (32, 32))
 pacman_half_left_img = pygame.transform.scale(pygame.image.load('./pacmansprites/pacman_half_left.png'), (32, 32))
 pacman_open_img = pygame.transform.scale(pygame.image.load('./pacmansprites/pacman_open.png'), (32,32))
+pacman_open_up_img = pygame.transform.scale(pygame.image.load('./pacmansprites/pacman_open_up.png'), (32, 32))
+pacman_open_down_img = pygame.transform.scale(pygame.image.load('./pacmansprites/pacman_open_down.png'), (32, 32))
+pacman_open_left_img = pygame.transform.scale(pygame.image.load('./pacmansprites/pacman_open_left.png'), (32, 32))
 ghost_1_img = pygame.transform.scale(pygame.image.load('./pacmansprites/ghost_1.png'), (32, 32))
 orange_1_img = pygame.transform.scale(pygame.image.load('./pacmansprites/orange_1.png'), (32,32))
 pinky_1_img = pygame.transform.scale(pygame.image.load('./pacmansprites/pinky_1.png'), (32,32))
 red_1_img = pygame.transform.scale(pygame.image.load('./pacmansprites/red_1.png'), (32,32))
 blue_1_img = pygame.transform.scale(pygame.image.load('./pacmansprites/blue_1.png'), (32,32))
 pacman_dir_img = pacman_half_img
-tick = 0
+tick = True
+tock = 0
+
 
 
 #Set Up Pacman
-pacman_radius = 12
+pacman_radius = 10
 pacman_position = [(GAME_W)/2, (GAME_H) - 240]
 pacman_direction = [0, 0]
 pacman_speed = 2
@@ -93,6 +98,10 @@ power_up_duration = 10
 power_up_timer = 0
 collisions = False
 pacman_lives = 3
+r = 1
+l = 0
+u = 0
+d = 0
 
 
 # Set up ghosts
@@ -126,10 +135,10 @@ right_tile = []
 
 # Function to move pacman from one side to the other.
 def teleport():
-    if pacman_position[0] <= 0:
-        pacman_position[0] = 920
+    if pacman_position[0] <= 10:
+        pacman_position[0] = 940
         return True
-    elif pacman_position[0] >= 945:
+    elif pacman_position[0] >= 950:
         pacman_position[0] = 20
         return True
     return False
@@ -176,13 +185,18 @@ while running:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
-    if tick == 0:
-        pacman_right_img = pacman_half_img
-        pacman_left_img = pacman_half_left_img
-        pacman_up_img = pacman_half_up_img
-        pacman_down_img = pacman_half_down_img
-    if tick == 1:
-        pass
+    # if tick == 0:
+    #     pacman_right_img = pacman_half_img
+    #     pacman_left_img = pacman_half_left_img
+    #     pacman_up_img = pacman_half_up_img
+    #     pacman_down_img = pacman_half_down_img
+    #     tick += 1
+    # elif tick == 1:
+    #     pacman_right_img = pacman_open_img
+    #     pacman_left_img = pacman_open_left_img
+    #     pacman_up_img = pacman_open_up_img
+    #     pacman_down_img = pacman_open_down_img
+    #     tick -= 1
         
 
 
@@ -191,16 +205,28 @@ while running:
     if event.type == pygame.KEYDOWN:
         if event.key == pygame.K_LEFT:
             pacman_direction = [-1, 0]
-            pacman_dir_img = pacman_left_img
+            l = 1
+            r = 0
+            u = 0
+            d = 0
         elif event.key == pygame.K_RIGHT:
             pacman_direction = [1, 0]
-            pacman_dir_img = pacman_right_img
+            r = 1
+            l = 0
+            u = 0
+            d = 0
         elif event.key == pygame.K_UP:
             pacman_direction = [0, -1]
-            pacman_dir_img = pacman_up_img
+            u = 1
+            r = 0
+            l = 0
+            d = 0
         elif event.key == pygame.K_DOWN:
             pacman_direction = [0, 1]
-            pacman_dir_img = pacman_down_img
+            d = 1
+            u = 0
+            r = 0
+            l = 0
     
     pacman_position[0] += pacman_direction[0] * pacman_speed
     pacman_position[1] += pacman_direction[1] * pacman_speed
@@ -355,6 +381,39 @@ while running:
 
     # Draw Map
     draw_map()
+    
+        
+    if tock > 31:
+        tock -= 1
+        tick = True
+    if tock == 30.5:
+        tock = 0
+    if tock == 29.5:
+        tock = 60
+    if tock < 29:
+        tock += 1
+        tick = False
+
+    if tick == True:
+        pacman_right_img = pacman_half_img
+        pacman_left_img = pacman_half_left_img
+        pacman_up_img = pacman_half_up_img
+        pacman_down_img = pacman_half_down_img
+    elif tick == False:
+        pacman_right_img = pacman_open_img
+        pacman_left_img = pacman_open_left_img
+        pacman_up_img = pacman_open_up_img
+        pacman_down_img = pacman_open_down_img
+    
+
+    if r == 1:
+        pacman_dir_img = pacman_right_img
+    elif l == 1:
+        pacman_dir_img = pacman_left_img
+    elif u == 1:
+        pacman_dir_img = pacman_up_img
+    elif d == 1:
+        pacman_dir_img = pacman_down_img
     #Draw Ghosts
     for i in range(num_ghosts):
         pygame.draw.rect(game_canvas, ghost_colors[i], (ghost_positions[i][0], ghost_positions[i][1], ghost_width, ghost_height))
@@ -369,6 +428,19 @@ while running:
 
     screen.blit(pygame.transform.scale(game_canvas,(SCREEN_WIDTH, SCREEN_HEIGHT)), (0,0))
     #Update the display
+    
+    if tock > 31:
+        tock -= 1
+        tick = True
+    if tock == 30.5:
+        tock = 0
+    if tock == 29.5:
+        tock = 60
+    if tock < 29:
+        tock += 1
+        tick = False
+    
+        
     
     if pacman_lives > 0:
         pygame.display.flip()
