@@ -57,7 +57,7 @@ pacman_half_img = pygame.image.load('./pacmansprites/pacman_half.png')
 pacman_open_img = pygame.image.load('./pacmansprites/pacman_open.png')
 ghost_1_img = pygame.image.load('./pacmansprites/ghost_1.png')
 orange_1_img = pygame.image.load('./pacmansprites/orange_1.png')
-pinky_1_img = pygame.image.load('./pacmansprites/pink_1.png')
+pinky_1_img = pygame.image.load('./pacmansprites/pinky_1.png')
 red_1_img = pygame.image.load('./pacmansprites/red_1.png')
 blue_1_img = pygame.image.load('./pacmansprites/blue_1.png')
 
