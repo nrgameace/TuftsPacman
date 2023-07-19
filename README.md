@@ -30,7 +30,7 @@ python main.py
 
 ### Troubleshooting
 #### The code is ready for use as soon as you download it.  However, if you are experiencing issues please make sure to double check these things:
-- The directory from which your terminal is running the command '''python main.py'''
+- The directory from which your terminal is running the command ```python main.py```
 - The image files are in the proper directory as shown on the repository
 - Anaconda is installed and all libraries were installed using it
 - Python is up to date
