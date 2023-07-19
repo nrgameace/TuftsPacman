@@ -11,7 +11,7 @@
 
 
 ## How to Run
-#### Please install each library by navigating to the liks below.  Make sure to clone the repository using the command: 
+#### Please install each library by navigating to the links below.  Make sure to clone the repository using the command: 
 ```
 git clone https://github.com/nrgameace/TuftsPacman.git
 ```
@@ -44,6 +44,7 @@ python main.py
 - Add sound effects to movements and actions taken in the game
 - Animate the ghosts movement so they look in the direction they are going
 - Make the endges smoother rather than blocks 
+- Add fruit that appears randomly and for a random duration of time
 
 ### Links
 #### Anaconda - *If you are adding Anaconda on windows, make sure you add it as a default path:
