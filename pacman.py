@@ -37,6 +37,7 @@ map_data = [
     [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
 
 ]
+pellets = 294
 
 
 
@@ -82,8 +83,7 @@ pinky_1_img = pygame.transform.scale(pygame.image.load('./pacmansprites/pinky_1.
 red_1_img = pygame.transform.scale(pygame.image.load('./pacmansprites/red_1.png'), (32,32))
 blue_1_img = pygame.transform.scale(pygame.image.load('./pacmansprites/blue_1.png'), (32,32))
 pacman_dir_img = pacman_half_img
-tick = True
-tock = 0
+
 
 
 
@@ -98,6 +98,7 @@ power_up_duration = 10
 power_up_timer = 0
 collisions = False
 pacman_lives = 3
+mouth_open = True
 r = 1
 l = 0
 u = 0
@@ -179,26 +180,23 @@ def draw_map():
                 pygame.draw.circle(game_canvas, YELLOW, [x+16, y+16], 7)
                 open_tiles.append([row, col])
 
+def toggle_mouth():
+    global mouth_open
+    mouth_open = not mouth_open
+last_toggle_time = pygame.time.get_ticks()
+
             
 
 while running:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
-    # if tick == 0:
-    #     pacman_right_img = pacman_half_img
-    #     pacman_left_img = pacman_half_left_img
-    #     pacman_up_img = pacman_half_up_img
-    #     pacman_down_img = pacman_half_down_img
-    #     tick += 1
-    # elif tick == 1:
-    #     pacman_right_img = pacman_open_img
-    #     pacman_left_img = pacman_open_left_img
-    #     pacman_up_img = pacman_open_up_img
-    #     pacman_down_img = pacman_open_down_img
-    #     tick -= 1
+
         
 
+    if pygame.time.get_ticks() - last_toggle_time >= 250:
+        toggle_mouth()
+        last_toggle_time = pygame.time.get_ticks()
 
 
     # Change Pac-Man direction
@@ -239,26 +237,26 @@ while running:
 
     
 
-    # Check for Pacman border collisions
-    if pacman_position[0] < 0:
-        pacman_position[0] = GAME_W - pacman_radius
-    elif pacman_position[0] >= GAME_W:
-        pacman_position[0] = 0
-    elif pacman_position[1] < 0:
-        pacman_position[1] = GAME_H - pacman_radius
-    elif pacman_position[1] >= GAME_H:
-        pacman_position[1] = 0
+    # # Check for Pacman border collisions
+    # if pacman_position[0] < 0:
+    #     pacman_position[0] = GAME_W - pacman_radius
+    # elif pacman_position[0] >= GAME_W:
+    #     pacman_position[0] = 0
+    # elif pacman_position[1] < 0:
+    #     pacman_position[1] = GAME_H - pacman_radius
+    # elif pacman_position[1] >= GAME_H:
+    #     pacman_position[1] = 0
     
-    # Check for Ghost border collisions
-    for i in range(num_ghosts):
-        if ghost_positions[i][0] < 0:
-            ghost_positions[i][0] = GAME_W - (ghost_width/2)
-        elif ghost_positions[i][0] >= GAME_W:
-            ghost_positions[i][0] = 0
-        elif ghost_positions[i][1] < 0:
-            ghost_positions[i][1] = GAME_H - (ghost_height/2)
-        elif ghost_positions[i][1] >= GAME_H:
-            ghost_positions[i][1] = 0
+    # # Check for Ghost border collisions
+    # for i in range(num_ghosts):
+    #     if ghost_positions[i][0] < 0:
+    #         ghost_positions[i][0] = GAME_W - (ghost_width/2)
+    #     elif ghost_positions[i][0] >= GAME_W:
+    #         ghost_positions[i][0] = 0
+    #     elif ghost_positions[i][1] < 0:
+    #         ghost_positions[i][1] = GAME_H - (ghost_height/2)
+    #     elif ghost_positions[i][1] >= GAME_H:
+    #         ghost_positions[i][1] = 0
 
     #Teleport
     teleport()
@@ -331,6 +329,7 @@ while running:
     if map_data[map_y][map_x] == 0:  # Dot
         map_data[map_y][map_x] = 2
         score += 10
+        pellets -= 1
         
     
     # Check for power-up collisions
@@ -383,27 +382,20 @@ while running:
     draw_map()
     
         
-    if tock > 31:
-        tock -= 1
-        tick = True
-    if tock == 30.5:
-        tock = 0
-    if tock == 29.5:
-        tock = 60
-    if tock < 29:
-        tock += 1
-        tick = False
-
-    if tick == True:
-        pacman_right_img = pacman_half_img
-        pacman_left_img = pacman_half_left_img
-        pacman_up_img = pacman_half_up_img
-        pacman_down_img = pacman_half_down_img
-    elif tick == False:
+    if mouth_open:
         pacman_right_img = pacman_open_img
         pacman_left_img = pacman_open_left_img
         pacman_up_img = pacman_open_up_img
         pacman_down_img = pacman_open_down_img
+    elif not mouth_open:
+        pacman_right_img = pacman_half_img
+        pacman_left_img = pacman_half_left_img
+        pacman_up_img = pacman_half_up_img
+        pacman_down_img = pacman_half_down_img
+
+    
+    
+
     
 
     if r == 1:
@@ -424,31 +416,27 @@ while running:
     
 
     #Rescale screen to fit game window
-    draw_text(f"Score: " + str(score) + "     " + str(pacman_lives), 25, 455, 10)
-
+    draw_text(f"Score: " + str(score) + "     Lives:" + str(pacman_lives), 25, 400, 10)
     screen.blit(pygame.transform.scale(game_canvas,(SCREEN_WIDTH, SCREEN_HEIGHT)), (0,0))
+
     #Update the display
-    
-    if tock > 31:
-        tock -= 1
-        tick = True
-    if tock == 30.5:
-        tock = 0
-    if tock == 29.5:
-        tock = 60
-    if tock < 29:
-        tock += 1
-        tick = False
-    
-        
-    
     if pacman_lives > 0:
         pygame.display.flip()
     else:
         game_canvas.fill(BLACK)
-        draw_text("GAME OVER", 50, GAME_W/2, GAME_H/2)
+        draw_text("GAME OVER", 50, GAME_W/2-100, GAME_H/2-100)
         screen.blit(pygame.transform.scale(game_canvas,(SCREEN_WIDTH, SCREEN_HEIGHT)), (0,0))
         pygame.display.flip()
+    if pellets > 0:
+        pass
+    else:
+        game_canvas.fill(BLACK)
+        draw_text("Congrats you win", 50, GAME_W/2-100, GAME_H/2-100)
+        screen.blit(pygame.transform.scale(game_canvas,(SCREEN_WIDTH, SCREEN_HEIGHT)), (0,0))
+        pygame.display.flip()
+        pygame.time.delay(5000)
+        running = False
+    
 
 
 # Limit the frame rate
