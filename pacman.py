@@ -111,7 +111,7 @@ ghost_height, ghost_width = 25, 25
 ghost_positions = []
 ghost_directions = []
 ghost_speed = 3
-ghost_colors = [LIGHT_BLUE, RED, PINK, ORANGE]
+ghost_colors = [blue_1_img, red_1_img, pinky_1_img, orange_1_img]
 ghosts = []
 ghosts_eliminated = []
 for i in range(num_ghosts):
@@ -230,33 +230,6 @@ while running:
     pacman_position[1] += pacman_direction[1] * pacman_speed
     pacman_x = int(pacman_position[0]/32)
     pacman_y = int(pacman_position[1]/32)
-    
-    # #Ghost change direction
-    # for i in range(num_ghosts):
-    #     if check_collision()
-
-    
-
-    # # Check for Pacman border collisions
-    # if pacman_position[0] < 0:
-    #     pacman_position[0] = GAME_W - pacman_radius
-    # elif pacman_position[0] >= GAME_W:
-    #     pacman_position[0] = 0
-    # elif pacman_position[1] < 0:
-    #     pacman_position[1] = GAME_H - pacman_radius
-    # elif pacman_position[1] >= GAME_H:
-    #     pacman_position[1] = 0
-    
-    # # Check for Ghost border collisions
-    # for i in range(num_ghosts):
-    #     if ghost_positions[i][0] < 0:
-    #         ghost_positions[i][0] = GAME_W - (ghost_width/2)
-    #     elif ghost_positions[i][0] >= GAME_W:
-    #         ghost_positions[i][0] = 0
-    #     elif ghost_positions[i][1] < 0:
-    #         ghost_positions[i][1] = GAME_H - (ghost_height/2)
-    #     elif ghost_positions[i][1] >= GAME_H:
-    #         ghost_positions[i][1] = 0
 
     #Teleport
     teleport()
@@ -342,13 +315,13 @@ while running:
 
     #Checks whether or not pacman has an active powerup, the outcome of pacman's collision with a ghost depends on if the power up is active or not.    
     if power_up_active:
-        ghost_colors = [DARK_BLUE, DARK_BLUE, DARK_BLUE, DARK_BLUE]
+        ghost_colors = [ghost_1_img, ghost_1_img, ghost_1_img, ghost_1_img]
         power_up_timer -= 1/60
         collisions = True
         if power_up_timer <= 0:
             power_up_active = False
             collisions = False
-            ghost_colors = [LIGHT_BLUE, RED, PINK, ORANGE]
+            ghost_colors = [blue_1_img, red_1_img, pinky_1_img, orange_1_img]
             
     
     
@@ -408,16 +381,16 @@ while running:
         pacman_dir_img = pacman_down_img
     #Draw Ghosts
     for i in range(num_ghosts):
-        pygame.draw.rect(game_canvas, ghost_colors[i], (ghost_positions[i][0], ghost_positions[i][1], ghost_width, ghost_height))
+        #pygame.draw.rect(game_canvas, ghost_colors[i], (ghost_positions[i][0], ghost_positions[i][1], ghost_width, ghost_height))
+        game_canvas.blit(ghost_colors[i], (ghost_positions[i][0] , ghost_positions[i][1] ))
     # Draw Pac-Man
     game_canvas.blit(pacman_dir_img, (pacman_position[0] - 16, pacman_position[1] - 16))
-    #pygame.draw.circle(game_canvas, YELLOW, pacman_position, pacman_radius)
     
     
 
     #Rescale screen to fit game window
     draw_text(f"Score: " + str(score) + "     Lives: " + str(pacman_lives), 25, 400, 10)
-    screen.blit(pygame.transform.scale(game_canvas,(SCREEN_WIDTH, SCREEN_HEIGHT)), (0,0))
+    screen.blit(pygame.transform.scale(game_canvas,(SCREEN_WIDTH-20, SCREEN_HEIGHT)), (0,0))
 
     #Update the display
     if pacman_lives > 0:
