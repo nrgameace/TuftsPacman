@@ -5,9 +5,9 @@
 ## About the Program
 ### This is a very basic recreation of Pacman in python with one level currently.  The ghosts contain basic logic for directions by using random integers.  These are all features that will be implemented later to create a more complete rendition of Pacman.
 ## How to Run
-### Please install each library by navigating to the liks below.  Make sure to clone the repository using the command - 
+### Please install each library by navigating to the liks below.  Make sure to clone the repository using the command: 
 ```
-git clone <repository url>
+git clone https://github.com/nrgameace/TuftsPacman.git
 ```
 ### After this, run the file main.py by navigating to the directory of which the file main.py is stored in.  Then in your terminal execute: 
 ```
@@ -24,7 +24,13 @@ python main.py
 
 
 ## Future Plans
- ### In the future we may update the game by including Pacman and ghosts more close to their original design.  We may also include more levels as well as program the individual ghosts to follow certain strategies.
+- Allow the ghosts to target and follow Pacman if in a close proximity
+- Add multiple levels and maps
+- Add a top score that keeps track of the highest score on a device
+- Add a main menu to customize options such as colors and input choice
+- Add sound effects to movements and actions taken in the game
+- Animate the ghosts movement so they look in the direction they are going
+- Make the endges smoother rather than blocks 
 
 ## Links
 ### Anaconda - *If you are adding Anaconda on windows, make sure you add it as a default path:
