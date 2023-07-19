@@ -416,7 +416,7 @@ while running:
     
 
     #Rescale screen to fit game window
-    draw_text(f"Score: " + str(score) + "     Lives:" + str(pacman_lives), 25, 400, 10)
+    draw_text(f"Score: " + str(score) + "     Lives: " + str(pacman_lives), 25, 400, 10)
     screen.blit(pygame.transform.scale(game_canvas,(SCREEN_WIDTH, SCREEN_HEIGHT)), (0,0))
 
     #Update the display
