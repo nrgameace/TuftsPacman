@@ -2,11 +2,14 @@
 ## By:
 ## Nick Regas, Joe Quinn, Connor Leathe, Alex Maeillo, and Joaquin Kiltz
 ## Final Project Tufts Coding Academy 2023
-### Libraries
-#### This code is based off of the python libraries pygame, Random, and Time.  These libraries need to be installed and running the latest version to ensure compatibility.  Anaconda can be used to manage packages effectively and ensure version compatibility.  The links to download instructions for each library are below.
 
 ### About the Program
 #### This is a very basic recreation of Pacman in python with one level.  Our goal was to make a viable rendition of the classic game to enjoy playing.  This program has its own Graphical User Interface and will display itself when running the program.  Enjoy playing our recreation of Pacman and have fun!
+
+### Libraries
+#### This code is based off of the python libraries pygame, Random, and Time.  These libraries need to be installed and running the latest version to ensure compatibility.  Anaconda can be used to manage packages effectively and ensure version compatibility.  The links to download instructions for each library are below.
+
+
 ## How to Run
 #### Please install each library by navigating to the liks below.  Make sure to clone the repository using the command: 
 ```
