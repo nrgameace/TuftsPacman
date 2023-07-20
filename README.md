@@ -1,5 +1,6 @@
 # Rendition of Pacman
 ## By:
+## The Code Monkeys:
 ## Nick Regas, Joe Quinn, Connor Leathe, Alex Maeillo, and Joaquin Kiltz
 ## Final Project Tufts Coding Academy 2023
 
