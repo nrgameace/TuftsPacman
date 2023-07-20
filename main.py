@@ -64,7 +64,7 @@ game_canvas = pygame.Surface((GAME_W,GAME_H))
 screen = pygame.display.set_mode((SCREEN_WIDTH,SCREEN_HEIGHT))
 running, playing = True, True
 dt, prev_time = 0, 0
-open_tiles = [[]]
+open_tiles = []
 FPS = 60
 clock = pygame.time.Clock()
 
