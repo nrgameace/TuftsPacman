@@ -1,9 +1,9 @@
-import pygame, os, time, random
+import pygame, random
 
 pygame.display.set_caption('Pacman')
 icon_image = pygame.image.load('PacmanImage.png')
 pygame.display.set_icon(icon_image)
-#Sets Up Game
+#Sets up game and grid system
 map_data = [
     [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
     [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
@@ -55,7 +55,7 @@ DARK_BLUE = (3,37,126)
 
 
 
-#Set Up Game
+#Set up game, display dimensions and framerate
 pygame.init()
 font_name = pygame.font.get_default_font()
 GAME_W,GAME_H = 960, 960
@@ -68,7 +68,7 @@ open_tiles = [[]]
 FPS = 60
 clock = pygame.time.Clock()
 
-#Loads the sprites
+#Loads the the png files as sprites
 pacman_half_img = pygame.transform.scale(pygame.image.load('./pacmansprites/pacman_half.png'), (32, 32))
 pacman_half_up_img = pygame.transform.scale(pygame.image.load('./pacmansprites/pacman_half_up.png'), (32,32))
 pacman_half_down_img = pygame.transform.scale(pygame.image.load('./pacmansprites/pacman_half_down.png'), (32, 32))
@@ -180,20 +180,21 @@ def draw_map():
                 pygame.draw.circle(game_canvas, YELLOW, [x+16, y+16], 7)
                 open_tiles.append([row, col])
 
+# Function that opens and closes Pac-Man's mouth
 def toggle_mouth():
     global mouth_open
     mouth_open = not mouth_open
 last_toggle_time = pygame.time.get_ticks()
 
             
-
+# The start of the game loop
 while running:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
 
         
-
+    #Toggles Pac-Man's mouth every time it renders
     if pygame.time.get_ticks() - last_toggle_time >= 250:
         toggle_mouth()
         last_toggle_time = pygame.time.get_ticks()
@@ -354,7 +355,7 @@ while running:
     # Draw Map
     draw_map()
     
-        
+    # Animates Pac-Man so when he moves up or down his face follows the direction   
     if mouth_open:
         pacman_right_img = pacman_open_img
         pacman_left_img = pacman_open_left_img
