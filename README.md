@@ -8,7 +8,7 @@
 #### This is a very basic recreation of Pacman in python with one level.  Our goal was to make a viable rendition of the classic game to enjoy playing.  This program has its own Graphical User Interface and will display itself when running the program.  Enjoy playing our recreation of Pacman and have fun!
 
 ### Libraries
-#### This code is based off of the python libraries pygame, Random, and Time.  These libraries need to be installed and running the latest version to ensure compatibility.  Anaconda can be used to manage packages effectively and ensure version compatibility.  The links to download instructions for each library are below.
+#### This code is based off of the python libraries Pygame and Random.  These libraries need to be installed and running the latest version to ensure compatibility.  Anaconda can be used to manage packages effectively and ensure version compatibility.  The links to download instructions for each library are below.
 
 
 ## How to Run
@@ -54,5 +54,3 @@ python main.py
 #### https://www.pygame.org/download.shtml
 #### Random2:
 #### https://pypi.org/project/random2/
-#### Time:
-#### https://pypi.org/project/python-time/
